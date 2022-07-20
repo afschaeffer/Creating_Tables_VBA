@@ -1,0 +1,155 @@
+Sub RTS_Summary()
+'
+' RTS_Summary Macro
+' Macro taking raw data from Perfect Mile and creating tables to summarize the data.
+'
+' Keyboard Shortcut: Ctrl+r
+'
+    Columns("A:S").Select
+    Sheets.Add
+    ActiveWorkbook.PivotCaches.Create(SourceType:=xlDatabase, SourceData:= _
+        "Dive Deep Data Return To Statio!R1C1:R1048576C19", Version:=6). _
+        CreatePivotTable TableDestination:="Sheet1!R3C1", TableName:="PivotTable1" _
+        , DefaultVersion:=6
+    Sheets("Sheet1").Select
+    Cells(3, 1).Select
+    With ActiveSheet.PivotTables("PivotTable1")
+        .ColumnGrand = True
+        .HasAutoFormat = True
+        .DisplayErrorString = False
+        .DisplayNullString = True
+        .EnableDrilldown = True
+        .ErrorString = ""
+        .MergeLabels = False
+        .NullString = ""
+        .PageFieldOrder = 2
+        .PageFieldWrapCount = 0
+        .PreserveFormatting = True
+        .RowGrand = True
+        .SaveData = True
+        .PrintTitles = False
+        .RepeatItemsOnEachPrintedPage = True
+        .TotalsAnnotation = False
+        .CompactRowIndent = 1
+        .InGridDropZones = False
+        .DisplayFieldCaptions = True
+        .DisplayMemberPropertyTooltips = False
+        .DisplayContextTooltips = True
+        .ShowDrillIndicators = True
+        .PrintDrillIndicators = False
+        .AllowMultipleFilters = False
+        .SortUsingCustomLists = True
+        .FieldListSortAscending = False
+        .ShowValuesRow = False
+        .CalculatedMembersInFilters = False
+        .RowAxisLayout xlCompactRow
+    End With
+    With ActiveSheet.PivotTables("PivotTable1").PivotCache
+        .RefreshOnFileOpen = False
+        .MissingItemsLimit = xlMissingItemsDefault
+    End With
+    ActiveSheet.PivotTables("PivotTable1").RepeatAllLabels xlRepeatLabels
+    ActiveSheet.PivotTables("PivotTable1").AddDataField ActiveSheet.PivotTables( _
+        "PivotTable1").PivotFields("scannable_id"), "Count of scannable_id", xlCount
+    With ActiveSheet.PivotTables("PivotTable1").PivotFields("shipment_reason")
+        .Orientation = xlRowField
+        .Position = 1
+    End With
+    Range("A3:B17").Select
+    Range("A4").Activate
+    Selection.Copy
+    Sheets.Add After:=ActiveSheet
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Sheets("Sheet1").Select
+    ActiveSheet.PivotTables("PivotTable1").PivotFields("shipment_reason"). _
+        Orientation = xlHidden
+    With ActiveSheet.PivotTables("PivotTable1").PivotFields("transporter_id")
+        .Orientation = xlRowField
+        .Position = 1
+    End With
+    Range("A3:B74").Select
+    Range("A4").Activate
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("Sheet2").Select
+    Range("D1").Select
+    Range("D1").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Sheets("Sheet1").Select
+    ActiveSheet.PivotTables("PivotTable1").PivotFields("transporter_id"). _
+        Orientation = xlHidden
+    With ActiveSheet.PivotTables("PivotTable1").PivotFields( _
+        "provider_company_short_code")
+        .Orientation = xlRowField
+        .Position = 1
+    End With
+    Range("A3:B15").Select
+    Range("A4").Activate
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("Sheet2").Select
+    Range("G1").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Range("B2").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Application.CutCopyMode = False
+    ActiveWorkbook.Worksheets("Sheet2").Sort.SortFields.Clear
+    ActiveWorkbook.Worksheets("Sheet2").Sort.SortFields.Add2 Key:=Range("B2"), _
+        SortOn:=xlSortOnValues, Order:=xlDescending, DataOption:=xlSortNormal
+    With ActiveWorkbook.Worksheets("Sheet2").Sort
+        .SetRange Range("A2:B15")
+        .Header = xlNo
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+    Range("E2").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    ActiveWorkbook.Worksheets("Sheet2").Sort.SortFields.Clear
+    ActiveWorkbook.Worksheets("Sheet2").Sort.SortFields.Add2 Key:=Range("E2"), _
+        SortOn:=xlSortOnValues, Order:=xlDescending, DataOption:=xlSortNormal
+    With ActiveWorkbook.Worksheets("Sheet2").Sort
+        .SetRange Range("D2:E72")
+        .Header = xlNo
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+    Range("H2").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    ActiveWorkbook.Worksheets("Sheet2").Sort.SortFields.Clear
+    ActiveWorkbook.Worksheets("Sheet2").Sort.SortFields.Add2 Key:=Range("H2"), _
+        SortOn:=xlSortOnValues, Order:=xlDescending, DataOption:=xlSortNormal
+    With ActiveWorkbook.Worksheets("Sheet2").Sort
+        .SetRange Range("G2:H13")
+        .Header = xlNo
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+    Columns("A:A").EntireColumn.AutoFit
+    Columns("D:D").EntireColumn.AutoFit
+    Columns("G:G").EntireColumn.AutoFit
+    Columns("B:B").EntireColumn.AutoFit
+    Columns("E:E").EntireColumn.AutoFit
+    Columns("H:H").EntireColumn.AutoFit
+    Range("A1:B15").Select
+    Application.CutCopyMode = False
+    ActiveSheet.ListObjects.Add(xlSrcRange, Range("$A$1:$B$15"), , xlYes).Name = _
+        "Table1"
+    Range("D1:E72").Select
+    Application.CutCopyMode = False
+    ActiveSheet.ListObjects.Add(xlSrcRange, Range("$D$1:$E$72"), , xlYes).Name = _
+        "Table2"
+    Range("G1:H13").Select
+    Application.CutCopyMode = False
+    ActiveSheet.ListObjects.Add(xlSrcRange, Range("$G$1:$H$13"), , xlYes).Name = _
+        "Table3"
+    Range("Table3[#All]").Select
+End Sub
